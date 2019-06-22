@@ -1,10 +1,11 @@
 
 import React, { Component } from "react";
 import { View, Text, Button } from "react-native";
+import { connect } from "react-redux";
 
 const Web3 = require('web3');
 
-export default class ParcelsScreen extends Component {
+class ParcelsScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -20,10 +21,10 @@ export default class ParcelsScreen extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, keys } = this.props;
     return (
       <View>
-        <Text>Hello world!</Text>
+        <Text>{JSON.stringify(keys)}</Text>
         <Button title="Scan" onPress={() => navigation.navigate("Scanner")}/>
         <Button title="Show ID" onPress={() => navigation.navigate("ID")}/>
         <Text>{JSON.stringify(this.state.block)}</Text>
@@ -31,3 +32,9 @@ export default class ParcelsScreen extends Component {
     );
   }
 }
+
+const select = (state) => ({
+  keys: state.keys,
+})
+
+export default connect(select)(ParcelsScreen);

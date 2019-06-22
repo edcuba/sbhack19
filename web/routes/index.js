@@ -9,9 +9,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/new', function(req, res, next) {
+  const mnemonic = bip39.generateMnemonic(128);
   res.render('new', {
     title: 'New Parcel',
-    content: bip39.generateMnemonic(128),
+    content: mnemonic,
   });
 });
 

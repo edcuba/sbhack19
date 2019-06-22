@@ -31,5 +31,7 @@ target 'sbhack' do
 
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
+  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+
 end
 

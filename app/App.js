@@ -4,9 +4,11 @@ import React, { Component } from "react";
 import {createStackNavigator, createAppContainer} from 'react-navigation';
 import ParcelsScreen from "./src/ParcelsScreen";
 import ScannerScreen from "./src/ScannerScreen";
-import store from "./src/reduxers";
+import store, { persistor } from "./src/reduxers";
 import IDScreen from './src/IDScreen';
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { ActivityIndicator } from "react-native";
 
 const MainNavigator = createStackNavigator({
   Parcels: ParcelsScreen,
@@ -24,7 +26,9 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Navigation />
+        <PersistGate loading={<ActivityIndicator />} persistor={persistor}>
+          <Navigation />
+        </PersistGate>
       </Provider>
     )
   }

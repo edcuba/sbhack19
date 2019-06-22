@@ -1,0 +1,28 @@
+<div class="row d-flex justify-content-center mb-4">
+  <div class="col-md-8">
+    <h1>{{title}}</h1>
+  </div>
+</div>
+<div class="row d-flex justify-content-center">
+  <canvas id="canvas"></canvas>
+</div>
+<div class="row d-flex justify-content-center mb-4">
+  <div class="col-md-8">
+    <form action="/" method="GET">
+      <button class="btn btn-primary" type="submit">Got it</button>
+    </form>
+  </div>
+</div>
+
+
+<script src="/javascripts/qrcode.min.js"></script>
+<script>
+  QRCode.toCanvas(
+    document.getElementById('canvas'),
+    "{{content}}",
+    function (error) {
+      if (error) console.error(error)
+      console.log('success!');
+    }
+  )
+</script>

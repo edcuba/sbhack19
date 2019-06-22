@@ -1,9 +1,30 @@
+import React, { Component } from "react";
+
 import {createStackNavigator, createAppContainer} from 'react-navigation';
-import ParcelScreen from './src/ParcelScreen';
+import ParcelsScreen from "./src/ParcelsScreen";
+import ScannerScreen from "./src/ScannerScreen";
+
+import { Provider } from 'react-redux'
 
 const MainNavigator = createStackNavigator({
-  Parcels: ParcelScreen,
+  Parcels: ParcelsScreen,
+  Scanner: ScannerScreen,
+}, {
+  initialRouteName: "Parcels",
 });
 
-const App = createAppContainer(MainNavigator);
+import store from "./src/reduxers";
+
+const Navigation = createAppContainer(MainNavigator);
+
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
+    )
+  }
+}
+
 export default App;

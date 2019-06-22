@@ -56,5 +56,7 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Scanning parcel QR codes</string>
 </dict>
 </plist>

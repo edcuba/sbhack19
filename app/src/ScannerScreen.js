@@ -47,13 +47,13 @@ class ScannerScreen extends Component {
     this.scanned = true;
     setInterval(() => this.scanned = false, 3000);
 
-    requestAnimationFrame(() => this.props.addKey(data));
+    requestAnimationFrame(() => this.props.loadScanData(data));
     this.props.navigation.goBack();
   }
 }
 
 const actions = (dispatch) => ({
-  addKey: (key) => dispatch({ type: "ADD_KEY", payload: key }),
+  loadScanData: (data) => dispatch({ type: "LOAD_SCAN_DATA", payload: data }),
 })
 
 export default connect(null, actions)(ScannerScreen);

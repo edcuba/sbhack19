@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var crypto = require("crypto");
 
-let bip39 = require("bip39");
+const Web3 = require('web3');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,10 +10,16 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/new', function(req, res, next) {
-  const mnemonic = bip39.generateMnemonic(128);
+
+  const web3 = new Web3();
+  const account = web3.eth.accounts.create();
+
+  const trackingNumber = crypto.randomBytes(20).toString('hex');
+
   res.render('new', {
     title: 'New Parcel',
-    content: mnemonic,
+    trackingNumber,
+    content: JSON.stringify({ privateKey: account.privateKey }),
   });
 });
 

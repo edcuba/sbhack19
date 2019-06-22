@@ -11,6 +11,9 @@
     <form action="/" method="GET">
       <button class="btn btn-primary" type="submit">Got it</button>
     </form>
+    <p>
+      {{ trackingNumber }}
+    </p>
   </div>
 </div>
 
@@ -19,7 +22,7 @@
 <script>
   QRCode.toCanvas(
     document.getElementById('canvas'),
-    "{{content}}",
+    JSON.stringify({{{content}}}),
     function (error) {
       if (error) console.error(error)
       console.log('success!');

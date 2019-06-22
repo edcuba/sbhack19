@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Button, ActivityIndicator, Dimensions } from "react-native";
 import QRCode from 'react-native-qrcode';
+import { ethereumHandle } from "./config";
 const Web3 = require('web3');
 
 
@@ -54,7 +55,7 @@ class ParcelDetails extends Component {
 
     this.setState({ loading: true, qr: null });
 
-    const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/'));
+    const web3 = new Web3(ethereumHandle);
 
     const block = await web3.eth.getBlock('latest');
 

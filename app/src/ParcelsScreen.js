@@ -2,8 +2,15 @@
 import React, { Component } from "react";
 import { View, Text, Button } from "react-native";
 import { connect } from "react-redux";
-
+import Parcel from "./Parcel";
 const Web3 = require('web3');
+
+const styles = {
+  root: {
+    flex: 1,
+  }
+};
+
 
 class ParcelsScreen extends Component {
 
@@ -23,11 +30,10 @@ class ParcelsScreen extends Component {
   render() {
     const { navigation, keys } = this.props;
     return (
-      <View>
-        <Text>{JSON.stringify(keys)}</Text>
+      <View style={styles.root}>
+        {keys.map((key, i) => <Parcel key={`key_${i}`} {...key}/>)}
         <Button title="Scan" onPress={() => navigation.navigate("Scanner")}/>
         <Button title="Show ID" onPress={() => navigation.navigate("ID")}/>
-        <Text>{JSON.stringify(this.state.block)}</Text>
       </View>
     );
   }

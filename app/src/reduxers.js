@@ -45,7 +45,7 @@ function* addKey(action) {
   const privateKey = key.privateKey.toString("hex");
   const publicKey = key.publicKey.toString("hex");
 
-  yield put({ type: "SAVE_KEY", payload: { private: privateKey, public: publicKey } });
+  yield put({ type: "SAVE_KEY", payload: { privateKey, publicKey } });
 }
 
 function* mySaga() {

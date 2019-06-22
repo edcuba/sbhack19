@@ -9,10 +9,12 @@ import IDScreen from './src/IDScreen';
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ActivityIndicator } from "react-native";
+import ParcelDetails from './src/ParcelDetails';
 
 const MainNavigator = createStackNavigator({
   Parcels: ParcelsScreen,
   Scanner: ScannerScreen,
+  ParcelDetails,
   ID: IDScreen,
 }, {
   initialRouteName: "Parcels",

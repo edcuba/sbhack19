@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import createSagaMiddleware from 'redux-saga'
-import { takeLatest, put, call } from 'redux-saga/effects'
+import { takeLatest, put, call, select } from 'redux-saga/effects'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { contractAddress, contractABI, httpProvider, courierKey } from "./config";
@@ -50,16 +50,39 @@ const persistor = persistStore(store)
 
 function* addKey(data) {
   const { privateKey, trackingId } = data;
-  yield put({ type: "SAVE_KEY", payload: { privateKey, trackingId } });
+  yield put({ type: "SAVE_KEY", payload: {
+    privateKey,
+    trackingId,
+    owner: true,
+  } });
+}
+
+function keysSelector(state) {
+  return state.keys;
 }
 
 function* takeOwnership(data) {
   const { trackingId } = data;
 
-  const wallet = new ethers.Wallet(courierKey, httpProvider);
+  const keys = yield select(keysSelector);
+
+  let pk = courierKey;
+
+  for (key of keys) {
+    if (key.trackingId === trackingId && key.privateKey) {
+      pk = key.privateKey;
+      break;
+    }
+  }
+
+  const wallet = new ethers.Wallet(pk, httpProvider);
   const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
-  yield call([contract, contract.takeOwnership], trackingId);
+  try {
+    yield call([contract, contract.takeOwnership], trackingId);
+  } catch (e) {
+    return alert("You are not permitted to take this package");
+  }
 
   yield put({ type: "SAVE_KEY", payload: { trackingId } });
 }
@@ -78,7 +101,6 @@ function* resolveIdentity(data) {
   const { timestamp } = block;
 
   const passed = Date.now() / 1000 - timestamp;
-
   if (passed > 600) {
     return alert("Block older than 10 minutes");
   }

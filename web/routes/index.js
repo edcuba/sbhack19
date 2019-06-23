@@ -33,7 +33,7 @@ router.get('/new', async function(req, res, next) {
 
   const contract = new web3.eth.Contract(abi, contractAddress);
 
-  const trackingId = crypto.randomBytes(20).toString('hex');
+  const trackingId = `${Math.floor(Math.random() * 100000)}-${Math.floor(Math.random() * 1000)}`;
 
   let result = await contract.methods.registerParcel(trackingId, account.address).send({
     from: shop.address,

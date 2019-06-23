@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { RNCamera } from 'react-native-camera';
 import { connect } from "react-redux";
 
@@ -14,6 +14,16 @@ const styles = {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  overlay: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "stretch",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
 };
 
@@ -35,10 +45,23 @@ class ScannerScreen extends Component {
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
+          children={this.renderOverlay()}
           onBarCodeRead={this.onScan.bind(this)}
         />
       </View>
     );
+  }
+
+  renderOverlay = () => {
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        <Image
+          resizeMode="cover"
+          style={styles.image}
+          source={require("./assets/overlay.png")}
+        />
+      </View>
+    )
   }
 
   onScan = ({ data }) => {
@@ -48,7 +71,17 @@ class ScannerScreen extends Component {
     setInterval(() => this.scanned = false, 3000);
 
     requestAnimationFrame(() => this.props.loadScanData(data));
-    this.props.navigation.goBack();
+
+    try {
+      const d = JSON.parse(data);
+      if (d.hash) {
+        this.props.navigation.navigate("ID");
+      } else {
+        this.props.navigation.goBack();
+      }
+    } catch {
+      this.props.navigation.goBack();
+    }
   }
 }
 

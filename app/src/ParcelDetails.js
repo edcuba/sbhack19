@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Button, ActivityIndicator, Dimensions } from "react-native";
 import QRCode from 'react-native-qrcode';
-import { ethereumHandle, httpProvider } from "./config";
+import { httpProvider } from "./config";
 const Web3 = require('web3');
 
 
@@ -60,7 +60,6 @@ class ParcelDetails extends Component {
     this.setState({ loading: true, qr: null });
 
     const block = await httpProvider.getBlock('latest');
-
     const { hash } = block;
 
     const web3 = new Web3();

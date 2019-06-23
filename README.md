@@ -3,7 +3,7 @@
 GitHub repo: https://github.com/edynox/sbhack19
 
 ## Application
-Core of our solution is an iOS app which directly communicates with a Smart Contract - since public beta review takes few days, we'll happy to provide you our test phones, or install the app on yours. We tried to demo the functionality in the video.
+Core of our solution is an **iOS app** which directly communicates with a Smart Contract - since public beta review takes few days, we'll happy to provide you our test phones, or install the app on yours. We tried to demo the functionality in the video.
 
 ## Flow
 

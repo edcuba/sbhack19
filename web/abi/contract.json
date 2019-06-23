@@ -1,0 +1,172 @@
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"name": "addressOfNextOwner",
+				"type": "address"
+			}
+		],
+		"name": "giveConsent",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "registerParcel",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "trackingId",
+				"type": "string"
+			}
+		],
+		"name": "takeOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "RegisteredParcel",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "customerAddress",
+				"type": "address"
+			}
+		],
+		"name": "Delivered",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "previousOwnerAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "newOwnerAddress",
+				"type": "address"
+			}
+		],
+		"name": "ChangedOwnership",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "previousOwnerAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "newOwnerAddress",
+				"type": "address"
+			}
+		],
+		"name": "ConsentGiven",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "trackingId",
+				"type": "string"
+			},
+			{
+				"name": "Address",
+				"type": "address"
+			}
+		],
+		"name": "checkConsent",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "trackingId",
+				"type": "string"
+			}
+		],
+		"name": "getStatus",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

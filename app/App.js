@@ -1,7 +1,7 @@
 import './global';
 
 import React, { Component } from "react";
-import {createStackNavigator, createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator, createAppContainer, createStackNavigator} from 'react-navigation';
 import ParcelsScreen from "./src/ParcelsScreen";
 import ScannerScreen from "./src/ScannerScreen";
 import store, { persistor } from "./src/reduxers";
@@ -11,11 +11,18 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { ActivityIndicator } from "react-native";
 import ParcelDetails from './src/ParcelDetails';
 
-const MainNavigator = createStackNavigator({
+const parcelsNavigator = createStackNavigator({
   Parcels: ParcelsScreen,
-  Scanner: ScannerScreen,
   ParcelDetails,
   ID: IDScreen,
+}, {
+  initialRouteName: "Parcels",
+})
+
+
+const MainNavigator = createBottomTabNavigator({
+  Parcels: parcelsNavigator,
+  Scanner: ScannerScreen,
 }, {
   initialRouteName: "Parcels",
 });

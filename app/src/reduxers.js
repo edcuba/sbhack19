@@ -3,8 +3,10 @@ import createSagaMiddleware from 'redux-saga'
 import { takeLatest, put, call } from 'redux-saga/effects'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import { ethereumHandle } from "./config";
+import { contractAddress, contractABI, httpProvider, courierKey } from "./config";
+import { ethers } from "ethers";
 const Web3 = require('web3');
+
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +27,9 @@ function filter(state = null, action) {
   if (action.type === "FILTER") {
     return action.payload;
   }
+  if (action.type === "RESET") {
+    return null;
+  }
   return state;
 }
 
@@ -44,19 +49,28 @@ const store = createStore(
 const persistor = persistStore(store)
 
 function* addKey(data) {
-  const { privateKey } = data;
-  yield put({ type: "SAVE_KEY", payload: { privateKey } });
+  const { privateKey, trackingId } = data;
+  yield put({ type: "SAVE_KEY", payload: { privateKey, trackingId } });
+}
+
+function* takeOwnership(data) {
+  const { trackingId } = data;
+
+  const wallet = new ethers.Wallet(courierKey, httpProvider);
+  const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+
+  yield call([contract, contract.takeOwnership], trackingId);
+
+  yield put({ type: "SAVE_KEY", payload: { trackingId } });
 }
 
 function* resolveIdentity(data) {
-  const web3 = new Web3(ethereumHandle);
-
   const { hash, signature } = data;
 
   // get the block from the network
   let block;
   try {
-    block = yield call([web3, web3.eth.getBlock], hash);
+    block = yield call([httpProvider, httpProvider.getBlock], hash);
   } catch (e) {
     return alert("Failed to fetch the block: " + e);
   }
@@ -65,10 +79,11 @@ function* resolveIdentity(data) {
 
   const passed = Date.now() / 1000 - timestamp;
 
-  /*if (passed > 600) {
+  if (passed > 600) {
     return alert("Block older than 10 minutes");
-  }*/
+  }
 
+  const web3 = new Web3();
   const recovered = web3.eth.accounts.recover(hash, signature);
 
   yield put({ type: "FILTER", payload: recovered });
@@ -86,11 +101,10 @@ function* loadScanData(action) {
   if (data.hash) {
     // proof of identity
     yield call(resolveIdentity, data)
-  } else if (data.number) {
-    // load of package number
-    // TODO
   } else if (data.privateKey) {
     yield call(addKey, data);
+  } else if (data.trackingId) {
+    yield call(takeOwnership, data);
   }
 }
 

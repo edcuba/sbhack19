@@ -1,10 +1,10 @@
 
 import React, { Component } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, ActivityIndicator, RefreshControl, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import Parcel from "./Parcel";
-import { ethereumHandle } from "./config";
-const Web3 = require('web3');
+import { httpProvider, contractABI, contractAddress, courierKey } from "./config";
+import { ethers } from "ethers";
 
 const styles = {
   root: {
@@ -17,25 +17,68 @@ class ParcelsScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { block: "Loading" };
+    this.state = { parcels: [], refreshing: false };
   }
 
   componentDidMount(){
-    const web3 = new Web3(ethereumHandle);
+    this.refreshParcels();
+  }
 
-    web3.eth.getBlock('latest').then((block) => this.setState({ block }));
+  componentDidUpdate(props) {
+    if (props.keys.length !== this.props.keys.length) {
+      this.refreshParcels();
+    }
+  }
+
+  refreshParcels = async () => {
+
+    this.setState({ refreshing: true });
+
+    const parcels = [];
+
+    for (key of this.props.keys) {
+
+      let currentOwner;
+      let address;
+
+      const pk = key.privateKey || courierKey;
+      const wallet = new ethers.Wallet(pk, httpProvider);
+      const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+      try {
+        currentOwner = await contract.getStatus(key.trackingId);
+      } catch (e) {
+        console.warn(e);
+      }
+      address = wallet.address;
+
+      if (!key.privateKey && address.toLowerCase() !== currentOwner.toLowerCase()) {
+        continue;
+      }
+
+      parcels.push({ ...key, currentOwner, address  });
+    }
+
+    this.setState({ parcels, refreshing: false });
   }
 
   render() {
-    const { navigation, keys, filter } = this.props;
+    const { navigation, filter } = this.props;
+
     return (
       <View style={styles.root}>
         <Text>Filter: {filter}</Text>
-        {keys.map((key, i) => <Parcel key={`key_${i}`} {...key}/>)}
-        <Button title="Scan" onPress={() => navigation.navigate("Scanner")}/>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.refreshParcels}
+            />
+          }
+        >
+          {this.state.parcels.map((key, i) => <Parcel key={`key_${i}`} {...key}/>)}
+        </ScrollView>
         <Button title="Show ID" onPress={() => navigation.navigate("ID")}/>
         <Button title="Reset" onPress={() => this.props.reset()}/>
-        <Text>{JSON.stringify(this.state.block)}</Text>
       </View>
     );
   }

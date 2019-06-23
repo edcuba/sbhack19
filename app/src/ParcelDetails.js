@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Button, ActivityIndicator, Dimensions } from "react-native";
 import QRCode from 'react-native-qrcode';
-import { ethereumHandle } from "./config";
+import { ethereumHandle, httpProvider } from "./config";
 const Web3 = require('web3');
 
 
@@ -21,7 +21,8 @@ class ParcelDetails extends Component {
   constructor(props) {
     super(props);
     this.privateKey = props.navigation.getParam("privateKey");
-    this.publicKey = props.navigation.getParam("publicKey");
+    this.trackingId = props.navigation.getParam("trackingId");
+    this.currentOwner = props.navigation.getParam("currentOwner");
     this.state = { qr: null, loading: false };
   }
 
@@ -42,7 +43,10 @@ class ParcelDetails extends Component {
           {this.privateKey}
         </Text>
         <Text>
-          {this.publicKey}
+          Current holder: {this.currentOwner}
+        </Text>
+        <Text>
+          ID: {this.trackingId}
         </Text>
         {qr}
         {this.state.loading ? <ActivityIndicator /> : null}
@@ -55,12 +59,11 @@ class ParcelDetails extends Component {
 
     this.setState({ loading: true, qr: null });
 
-    const web3 = new Web3(ethereumHandle);
-
-    const block = await web3.eth.getBlock('latest');
+    const block = await httpProvider.getBlock('latest');
 
     const { hash } = block;
 
+    const web3 = new Web3();
     const account = web3.eth.accounts.privateKeyToAccount(this.privateKey);
 
     const sig = account.sign(hash);

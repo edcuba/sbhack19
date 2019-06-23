@@ -15,15 +15,18 @@ const styles = {
 
 class Parcel extends Component {
   render() {
-    const { privateKey, publicKey } = this.props;
+    const { privateKey, trackingId, currentOwner, address } = this.props;
     return (
       <TouchableOpacity onPress={this.goToDetails} >
         <View style={styles.root}>
           <Text>
-            {privateKey}
+            Address: {address}
           </Text>
           <Text>
-            {publicKey}
+            ID: {trackingId}
+          </Text>
+          <Text>
+            Current owner: {currentOwner}
           </Text>
         </View>
       </TouchableOpacity>
@@ -31,8 +34,8 @@ class Parcel extends Component {
   }
 
   goToDetails = () => {
-    const { privateKey, publicKey, navigation } = this.props;
-    navigation.navigate("ParcelDetails", { privateKey, publicKey });
+    const { privateKey, trackingId, navigation, currentOwner } = this.props;
+    navigation.navigate("ParcelDetails", { privateKey, trackingId, currentOwner });
   }
 }
 

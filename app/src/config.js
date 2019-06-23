@@ -1,10 +1,10 @@
 
 import { ethers } from "ethers";
 
-const contractAddress = "0x963aa6120c4cc1acb217484f7848ef24f34b2cf3";
+const contractAddress = "0xbc072364afff0e5c434b6333c0f0b972b5d07779";
 const contractABI = require("../abi/contract.json");
 const httpProvider = new ethers.providers.JsonRpcProvider("http://192.168.225.60:8545");
-const courierKey = "0x15d5e27c479554fccba4ecb00b661879658e32604332bb7826f99fa3b7899a76";
+const courierKey = "0xa1577af4de9633e1e13ade1168d983464f712cd784e3b73315845b1c29c535c9";
 
 export {
   httpProvider,

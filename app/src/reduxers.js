@@ -102,13 +102,14 @@ function* resolveIdentity(data) {
 
   const passed = Date.now() / 1000 - timestamp;
   if (passed > 600) {
-    return alert("Block older than 10 minutes");
+    // return alert("Block older than 10 minutes");
   }
 
   const web3 = new Web3();
   const recovered = web3.eth.accounts.recover(hash, signature);
 
-  yield put({ type: "FILTER", payload: recovered });
+  // TODO: query consents
+  // yield put({ type: "FILTER", payload: recovered });
 }
 
 function* loadScanData(action) {
